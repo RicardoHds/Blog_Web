@@ -1,0 +1,29 @@
+﻿@model List<Blog.Models.Post>
+
+@{
+    ViewBag.Title = "Home Page";
+}
+
+<a style="margin-top: 20px" class="btn btn-default" href='@Url.Action("Add", "Home")'>Agregar Post</a>
+
+<table style="margin-top: 40px" class="table">
+    @foreach (var post in Model)
+    {
+        <tr>
+            <td>
+                <h4>
+                    <a href='@Url.Action("Show", "Home", new { id = post.Id })'> @post.Title </a>
+                </h4>
+                <p>@post.Date</p>
+                <p>@post.Category</p>
+            </td>
+            <td>
+                <a class="btn btn-default" href='@Url.Action("Add", "Home", new { id = post.Id })'>Editar</a>
+            </td>
+            <td>
+                <a class="btn btn-default" href='@Url.Action("Delete", "Home", new { id = post.Id })'>Eliminar</a>
+            </td>
+        </tr>
+    }
+</table>
+

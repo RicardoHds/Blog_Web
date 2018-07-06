@@ -1,0 +1,41 @@
+﻿@model Blog.ViewModels.PostVM
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+
+
+@using (Html.BeginForm("Add", "Home", FormMethod.Post))
+{
+    @Html.HiddenFor(p => p.post.Id)
+
+    <div class="form-group" style="margin-top: 50px">
+        @Html.LabelFor(p => p.post.Title)
+        @Html.TextBoxFor(p => p.post.Title, new { @class = "form-control" })
+        @Html.ValidationMessageFor(p => p.post.Title)
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(p => p.post.Date)
+        @Html.TextBoxFor(p => p.post.Date, new { type = "date", @class = "form-control" })
+        @Html.ValidationMessageFor(p => p.post.Date)
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(p => p.post.Description)
+        @Html.TextAreaFor(p => p.post.Description, new { @class = "form-control" })
+        @Html.ValidationMessageFor(p => p.post.Description)
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(p => p.post.Category)
+        @Html.DropDownListFor(p => p.post.Category, new SelectList(Model.categories, "Name_Category", "Name_Category"), new { @class = "form-control" })
+    </div>
+
+    <div class="form-group">
+        <button type="submit" class="btn btn-success" role="button">Enviar</button>
+        <button type="button" class="btn btn-default" role="button">@Html.ActionLink("Cancelar", "Index")</button>
+    </div>
+
+}
