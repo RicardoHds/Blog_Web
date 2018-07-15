@@ -1,41 +1,51 @@
-﻿@model Blog.ViewModels.PostVM
+@model Blog.ViewModels.PostVM
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
+    // ViewBag.param = Request.QueryString[""];
+    var id = ViewContext.RouteData.Values["id"];
+}
 
+@if (@id == null)
+{
+  <h2>Agregar nuevo Post</h2>
+}
+else
+{
+  <h2>Modificar Post: @Model.post.Title</h2>
 }
 
 
 @using (Html.BeginForm("Add", "Home", FormMethod.Post))
 {
-    @Html.HiddenFor(p => p.post.Id)
+  @Html.HiddenFor(p => p.post.Id)
 
-    <div class="form-group" style="margin-top: 50px">
-        @Html.LabelFor(p => p.post.Title)
-        @Html.TextBoxFor(p => p.post.Title, new { @class = "form-control" })
-        @Html.ValidationMessageFor(p => p.post.Title)
-    </div>
+  <div class="form-group" style="margin-top: 20px">
+    @Html.LabelFor(p => p.post.Title)
+    @Html.TextBoxFor(p => p.post.Title, new { @class = "form-control" })
+    @Html.ValidationMessageFor(p => p.post.Title)
+  </div>
 
-    <div class="form-group">
-        @Html.LabelFor(p => p.post.Date)
-        @Html.TextBoxFor(p => p.post.Date, new { type = "date", @class = "form-control" })
-        @Html.ValidationMessageFor(p => p.post.Date)
-    </div>
+  <div class="form-group">
+    @Html.LabelFor(p => p.post.Date)
+    @Html.TextBoxFor(p => p.post.Date, new { type = "date", @class = "form-control" })
+    @Html.ValidationMessageFor(p => p.post.Date)
+  </div>
 
-    <div class="form-group">
-        @Html.LabelFor(p => p.post.Description)
-        @Html.TextAreaFor(p => p.post.Description, new { @class = "form-control" })
-        @Html.ValidationMessageFor(p => p.post.Description)
-    </div>
+  <div class="form-group">
+    @Html.LabelFor(p => p.post.Description)
+    @Html.TextAreaFor(p => p.post.Description, new { @class = "form-control" })
+    @Html.ValidationMessageFor(p => p.post.Description)
+  </div>
 
-    <div class="form-group">
-        @Html.LabelFor(p => p.post.Category)
-        @Html.DropDownListFor(p => p.post.Category, new SelectList(Model.categories, "Name_Category", "Name_Category"), new { @class = "form-control" })
-    </div>
+  <div class="form-group">
+    @Html.LabelFor(p => p.post.Category)
+    @Html.DropDownListFor(p => p.post.Category, new SelectList(Model.categories, "Name_Category", "Name_Category"), new { @class = "form-control" })
+  </div>
 
-    <div class="form-group">
-        <button type="submit" class="btn btn-success" role="button">Enviar</button>
-        <button type="button" class="btn btn-default" role="button">@Html.ActionLink("Cancelar", "Index")</button>
-    </div>
+  <div class="form-group">
+    <button type="submit" class="btn btn-success" role="button">Enviar</button>
+    <button type="button" class="btn btn-default" role="button">@Html.ActionLink("Cancelar", "Index")</button>
+  </div>
 
 }
