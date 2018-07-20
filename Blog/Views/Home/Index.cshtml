@@ -1,12 +1,21 @@
-﻿@model List<Blog.Models.Post>
+@model List<Blog.Models.Post>
 
 @{
     ViewBag.Title = "Home Page";
 }
+<!-- Own View -->
+<style>
+  .margin-50 {
+    margin-top: 50px;
+  }
+  .margin-20 {
+    margin-top: 20px;
+  }
+</style>
 
-<a style="margin-top: 20px" class="btn btn-default" href='@Url.Action("Add", "Home")'>Agregar Post</a>
+<a class="btn btn-default margin-20" href='@Url.Action("Add", "Home")'>Agregar Post</a>
 
-<table style="margin-top: 40px" class="table">
+<table class="table margin-50">
     @foreach (var post in Model)
     {
         <tr>

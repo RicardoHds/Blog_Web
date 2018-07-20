@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -9,25 +9,25 @@ namespace Blog.Controllers
 {
     public class HomeController : Controller
     {
+        // Next code lines are own
         public ActionResult Index()
         {
-            // Accedemos a todos los posts que tenemos en la base de datos y enviamos a la vista
+            // Get all posts from DB and send to index view
             using (var db = new PostContext())
             {
                 return View(db.Posts.ToList());
             }
         }
 
-        // Metodo para vista agregar y editar
+        // The following method works to show the "Add View"
+        // if have ID return the information if not have ID only return only ViewModel
         [HttpGet]
         public ActionResult Add(int? id)
         {
-            // Si no recibe ID enviamos a la vista para agregar nuevo registro, sino usamos instrucciones para enviar a vista editar
             if (!id.HasValue)
             {
                 using (var db = new PostContext())
                 {
-                    // Cargar la lista de categorias que tenemos en la DB
                     List<Category> categories = db.Categories.ToList();
 
                     PostVM pvm = new PostVM();
@@ -40,7 +40,6 @@ namespace Blog.Controllers
             {
                 using (var db = new PostContext())
                 {
-                    // Buscamos el ID recibido en parametro y buscamos en la DB para editar
                     List<Post> posts = db.Posts.ToList();
                     var postEdit = posts.First(p => p.Id == id.Value);
 
@@ -50,17 +49,16 @@ namespace Blog.Controllers
                     pvm.post = postEdit;
                     pvm.categories = mycategories;
 
-
                     return View(pvm);
                 }
             }
         }
         
-        // Metodo para agregar y editar
+        // This method works to POST ind DB (new or edit)
         [HttpPost]
         public ActionResult Add(Post post)
         {
-            // Si temos un ID diferente de 0 modificamos el registro del post
+            // New post
             if (post.Id == 0)
             {
                 using (var db = new PostContext())
@@ -70,6 +68,7 @@ namespace Blog.Controllers
                 }
                 return RedirectToAction("Index");
             }
+            // Edit post
             else
             {
                 using (var db = new PostContext())
@@ -82,7 +81,7 @@ namespace Blog.Controllers
             
         }
 
-        // Metodo para mostrar el post
+        // Method only to show a specific post
         [HttpGet]
         public ActionResult Show(int id)
         {
@@ -104,7 +103,7 @@ namespace Blog.Controllers
             }
         }
 
-        // Metodo para agregar comentario
+        // Method to save comments in DB and save a relation with Post_Id
         [HttpPost]
         public ActionResult AddComment(Comment comment)
         {
@@ -116,44 +115,35 @@ namespace Blog.Controllers
             return RedirectToAction("Index");
         }
 
-        // Metodo para enviar a pantalla de confirmacion eliminar
+        // Method works show a voiew confirmation to delete post
         public ActionResult Delete(int id)
         {
             using (var db = new PostContext())
             {
                 Post post = db.Posts.First(p => p.Id == id);
+
                 return View(post);
             }
         }
 
-        // Metodo para eliminar
+        // Methos works to delete post in DB and comments with the same Post_Id
         [HttpPost]
         public ActionResult Delete(Post post)
         {
             using (var db = new PostContext())
             {
                 Post postDelete = db.Posts.First(p => p.Id == post.Id);
+
+                foreach(var comment in db.Comments.Where(c => c.Id_Post == post.Id))
+                {
+                  db.Comments.Remove(comment);
+                }
+
                 db.Posts.Remove(postDelete);
                 db.SaveChanges();
+
                 return RedirectToAction("Index");
             }
-        }
-
-        
-
-
-        public ActionResult About()
-        {
-            ViewBag.Message = "Your application description page.";
-
-            return View();
-        }
-
-        public ActionResult Contact()
-        {
-            ViewBag.Message = "Your contact page.";
-
-            return View();
         }
     }
 }

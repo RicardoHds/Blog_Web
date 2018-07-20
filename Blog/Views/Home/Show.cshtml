@@ -1,11 +1,17 @@
-﻿@model Blog.ViewModels.PostVM
+@model Blog.ViewModels.PostVM
 
 @{
-    ViewBag.Title = "Show";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+  ViewBag.Title = "Show";
+  Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<!-- Own View -->
+<style>
+  .margin-50 {
+    margin-top: 50px;
+  }
+</style>
 
-<button style="margin-top: 50px" type="button" class="btn btn-default" role="button">@Html.ActionLink("Regresar", "Index")</button>
+@Html.ActionLink("Regresar", "Index", null, new { @class = "btn btn-default margin-50" } )
 
 <h2>@Model.post.Title</h2>
 <h4>@Model.post.Category</h4>
@@ -14,37 +20,37 @@
 <p>@Model.post.Description</p>
 
 
+<div class="margin-50">
+  <h4>Agregar comentario</h4>
 
-<h4 style="margin-top: 50px">Agregar comentario</h4>
-@using (Html.BeginForm("AddComment", "Home", FormMethod.Post))
-{
+  @using (Html.BeginForm("AddComment", "Home", FormMethod.Post))
+  {
     @Html.HiddenFor(p => p.comment.Id_Post, new { Value = @Model.post.Id })
-
     <div class="form-group">
-        @Html.LabelFor(p => p.comment.Name)
-        @Html.TextBoxFor(p => p.comment.Name, new { @class = "form-control" })
-        @Html.ValidationMessageFor(p => p.comment.Name)
-    </div>
-
-    <div class="form-group">
-        @Html.LabelFor(p => p.comment.Review)
-        @Html.TextAreaFor(p => p.comment.Review, new { @class = "form-control" })
-        @Html.ValidationMessageFor(p => p.comment.Review)
+      @Html.LabelFor(p => p.comment.Name)
+      @Html.TextBoxFor(p => p.comment.Name, new { @class = "form-control" })
+      @Html.ValidationMessageFor(p => p.comment.Name)
     </div>
 
     <div class="form-group">
-        <button type="submit" class="btn btn-success" role="button">Enviar</button>
+      @Html.LabelFor(p => p.comment.Review)
+      @Html.TextAreaFor(p => p.comment.Review, new { @class = "form-control" })
+      @Html.ValidationMessageFor(p => p.comment.Review)
     </div>
-}
 
-
-<h4 style="margin-top: 50px">Comentarios</h4>
-
-@foreach (var com in Model.comments)
-{
-    <div style="margin-top: 20px">
-        <strong>@com.Name</strong>
-        <p>@com.Review</p>
+    <div class="form-group">
+      <button type="submit" class="btn btn-success" role="button">Enviar</button>
     </div>
-}
-    
+  }
+
+  <div class="margin-50">
+    <h4>Comentarios</h4>
+    @foreach (var comment in Model.comments)
+    {
+      <div style="margin-top: 20px">
+        <strong>@comment.Name</strong>
+        <p>@comment.Review</p>
+      </div>
+    }
+  </div>
+</div>
